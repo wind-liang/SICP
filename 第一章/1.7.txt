@@ -1,0 +1,17 @@
+;传入旧的猜测值和新的猜测值
+(define (good-enough? old-guess new-guess)
+    (> 0.01
+        (/ (abs (- new-guess old-guess))
+            old-guess)))
+(define (improve guess x)
+    (average guess (/ x guess)))
+(define (average x y)
+    (/ (+ x y) 2))
+;if 条件真返回新的猜测值，相比之前
+(define (sqrt-iter guess x)
+    (if (good-enough? guess (improve guess x))
+        (improve guess x)
+        (sqrt-iter (improve guess x)
+            x)))
+(define (sqrtnew x)
+    (sqrt-iter 1.0 x))

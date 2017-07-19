@@ -1,0 +1,10 @@
+这道练习的翻译有误，应该是『返回其中较大的两个数的平方和』，而不是『。。。两个数之和』。
+计算两个数的平方和，两次利用 max 函数返回最大值即可
+(define (square x)(* x x))
+
+(define (sumOfSquare x y)
+     (+ (square x) (square y)))
+     
+(define (maxSumOfSquare x y z)
+    (max (sumOfSquare x y) (max (sumOfSquare x z) (sumOfSquare z y))))
+    
