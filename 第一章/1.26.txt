@@ -1,0 +1,2 @@
+但是因为 Louis 的 expmod 重复计算了两次 (expmod base (/ exp 2) m),计算量加倍了。
+所以把 原本 Θ(logn)Θ(log⁡n) 的计算过程变成了 Θ(n)

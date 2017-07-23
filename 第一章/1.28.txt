@@ -1,0 +1,46 @@
+;产生一个随机数，判断它的 n-1 次幂 模 n 是否等于 1
+(define (fermat-test n)
+    (define (try-it a)
+        (= (expmod a (- n 1) n) 1))
+    (try-it (+ 1 (random (- n 1)))))
+    
+(define (square x) (* x x))
+
+;进行 times 次的迭代
+(define (fast-prime? n times)
+    (cond ((= times 0)
+            true)
+          ((fermat-test n)
+            (fast-prime? n (- times 1)))
+          (else
+            false)))
+            
+;base 的 exp 幂 模 m 的结果，并判断当中产生的数模 n 是否等于 1            
+(define (expmod base exp m)
+    (cond ((= exp 0)
+            1)
+          ((nontrivial-square-root? base m) 0)
+          ((even? exp)
+            (remainder (square (expmod base (/ exp 2) m))
+                       m))
+          (else
+            (remainder (* base (expmod base (- exp 1) m))
+                       m))))
+;判断平方模 n 是否等于 1             
+(define (nontrivial-square-root? a n)
+    (and (not (= a 1))
+         (not (= a (- n 1)))
+         (= 1 (remainder (square a) n))))
+         
+
+;进行 n/2 次迭代，向上取整      
+(define (prime? n)
+    (fast-prime? n (ceiling (/ n 2))))
+    
+    
+;问题
+http://sicp.readthedocs.io/en/latest/chp1/28.html
+每次产生的随机数可能相同吧？这样 n/2 次也不能保证结果吧。
+还有就是求幂模 n 的过程里，对其中的每一个结果都进行了平方模 n 判断，所以每一次的判断中，检查了小于 n 的不只一个吧，这样也不是至少 n/2 次吧？
+因为每次除了产生的随机数进行了判断，其中求幂过程产生的数也进行了判断。所以次数一般选多少？
+求解答

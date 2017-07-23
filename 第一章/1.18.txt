@@ -1,0 +1,8 @@
+(define (double x) (+ x x))
+(define (halve x) (/ x 2))
+(define (fast-expt b n)
+    (expt-iter b n 0))
+(define (expt-iter b n a)
+    (cond ((= 0 n) a)
+    ((even? n) (expt-iter (double b) (halve n) a))
+    ((odd? n) (expt-iter b (- n 1) (+ a b)))))

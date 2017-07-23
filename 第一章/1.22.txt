@@ -1,0 +1,40 @@
+;输出连续素数奇数
+(define (continue-prime n count)
+    (cond ((= count 0) (display "done"))
+        ((prime? n)
+            (display n)
+            (newline)
+            (continue-prime (next-odd n) (- count 1)))
+        (else
+            (continue-prime (next-odd n) count))))
+;求出下一个奇数
+(define (next-odd n)
+    (if (even? n)
+        (+ n 1)
+        (+ n 2)))
+;求出最小因子        
+(define (square x) (* x x))
+(define (smallest-divisor n)
+    (find-divisor n 2))
+(define (find-divisor n test-divisor)
+    (cond ((> (square test-divisor) n)
+            n)
+          ((divides? test-divisor n)
+            test-divisor)
+          (else
+            (find-divisor n (+ test-divisor 1)))))
+(define (divides? a b)
+    (= (remainder b a) 0))  
+;根据最小因子判断是否是素数    
+(define (prime? n)
+    (= n (smallest-divisor n)))
+    
+    
+;本机得不到时间，贴别人的代码算时间
+;http://sicp.readthedocs.io/en/latest/chp1/22.html
+(define (search-for-primes n)
+    (let ((start-time (real-time-clock)))
+        (continue-primes n 3)
+        (- (real-time-clock) start-time)))
+;可以看到，当 search-for-primes 的输入以 10 为倍数上升时，寻找素数所需的时间并不是严格地按照 10−−√10 倍上升的，关于这个问题，我们留到 练习 1.24 再进行详细的说明。
+;Note 这里并没有使用书本给出的 timed-primes-test 等几个程序来写 search-for-primes 函数，因为使用它们的话反而会使程序变得复杂起来，所以没有必要多此一举。

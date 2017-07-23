@@ -1,0 +1,24 @@
+;费马检查，对 q 进行判断
+(define (fermat-test n a)
+    (= (expmod a n n) a))
+   
+(define (square x) (* x x))
+(define (expmod base exp m)
+    (cond ((= exp 0)
+            1)
+          ((even? exp)
+            (remainder (square (expmod base (/ exp 2) m))
+                       m))
+          (else
+            (remainder (* base (expmod base (- exp 1) m))
+                       m))))
+                       
+;用迭代的方式才 n-1 到 1 一次检查                      
+(define (check-Carmichael n)
+    (iter n (- n 1)))
+(define (iter n count)
+    (cond ((= count 0) true)
+        ((fermat-test n count) (iter n (- count 1)))
+        (else false)))
+ 
+    
