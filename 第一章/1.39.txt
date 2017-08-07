@@ -1,0 +1,18 @@
+(define (cont-frac n d k)
+    (cont-frac-iter n d (/ (n k) (d k)) (- k 1)))
+(define (cont-frac-iter n d product k)
+    (if (= k 0)
+        product
+        (cont-frac-iter n d (/ (n k) (+ (d k) product)) (- k 1))))
+
+
+(define (tan-cf x k)
+    (define  (d k)
+        (- (* k 2) 1.0))
+        
+    (define (n k)
+        (if (= k 1)
+            x
+            (-(* x x))))      
+    (cont-frac n d k))
+     

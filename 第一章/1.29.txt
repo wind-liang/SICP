@@ -1,0 +1,28 @@
+;书上的 sum
+(define (sum term a next b)
+    (if (> a b)
+        0
+        (+ (term a)
+            (sum term (next a) next b))))
+(define (inc x) (+ x 1))
+
+(define (integral f a b n)
+    ;yk 中的 h
+    (define h (/ (- b a) n))
+    ;yk 计算
+    (define (y k)
+        (f (+  a (* k h))))
+    ;得到系数
+    (define (num aa)
+        (if (even? aa)
+            2
+            4))
+    ;作用于每一项的函数
+    (define (int-term aaa) (* (num aaa) (y aaa)) )
+    ;最终结果，exact->inexact 化为小数
+    (* (/ h 3) (+ (y 0) (y n) (sum int-term (exact->inexact 1) inc (- n 1)))))
+(define (cube x) (* x x x))
+
+
+;比之前的精度更高了
+ 

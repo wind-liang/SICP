@@ -1,0 +1,9 @@
+;见 http://sicp.readthedocs.io/en/latest/chp1/45.html    
+(define (repeated f n)
+    (if (= n 1)
+        f
+        (compose f (repeated f (- n 1)))))
+(define (expt base n)
+    (if (= n 0)
+        1
+        ((repeated (lambda (x) (* base x)) n) 1)))

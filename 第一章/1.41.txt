@@ -1,0 +1,117 @@
+(define (inc x) (+ 1 x))
+(define (double f)
+    (lambda (x) (f (f x))))
+    
+;(((double (double double)) inc) 5)
+;返回21
+;http://wiki.drewhess.com/wiki/SICP_exercise_1.41 作者好强
+Here's the requested procedure double:
+(define (double f)
+  (lambda (x) (f (f x))))
+We can show that it works by substitution using inc:
+(define (inc x) (+ x 1))
+ 
+((double inc) 3)
+This expression expands by substitution as follows:
+((double inc) 3)
+ 
+((lambda (x) (inc (inc x))) 3)
+ 
+(inc (inc 3))
+ 
+(inc (4))
+ 
+5
+To answer the question posed by the exercise, let's again use substitution to figure it out. The exercise asks us to evaluate the combination
+(((double (double double)) inc) 5)
+We need to evaluate the operator in this expression. Again by substitution:
+((double (double double)) inc)
+ 
+((double (lambda (x) (double (double x)))) inc)
+We stop expanding the lambda expression (lambda (x) (double (double x))) at this point, 
+because we can't expand it any further until it's applied to an argument x. 
+Now we expand the outer-most (double f) expression, 
+where f is (lambda (x) (double (double x))). 
+In fact, let's just name that expression f here to keep things simple:
+((double f) inc)
+ 
+((lambda (x) (f (f x))) inc)
+Now apply this lambda expression to inc, substituting inc for x:
+(f (f inc))
+Now let's re-expand f in the inner-most expression,
+(f ((lambda (x) (double (double x))) inc))
+By applying the lambda expression to inc in the inner expression ((lambda (x) (double (double x))) inc) we get
+(f (double (double inc)))
+ 
+(f (double (lambda (x) (inc (inc x)))))
+Abbreviate the lambda expression (lambda (x) (inc (inc x))) as g:
+(f (double g))
+ 
+(f (lambda (x) (g (g x))))
+And abbreviate this lambda expression (lambda (x) (g (g x))) as h:
+(f h)
+Recall that f itself is an abbreviation for a lambda expression, so now we can apply it to h. Re-expand f to get:
+((lambda (x) (double (double x))) h)
+ 
+(double (double h))
+ 
+(double (lambda (x) (h (h x))))
+Abbreviate this lambda expression (lambda (x) (h (h x))) as i:
+(double i)
+ 
+(lambda (x) (i (i x)))
+Now we've got a lambda expression for the operator in the original expression; i.e., 
+(lambda (x) (i (i x))) is the expansion of ((double (double double)) inc). Let's apply it to 5:
+((lambda (x) (i (i x))) 5)
+ 
+(i (i 5))
+and now we re-expand the abbreviations we used for our intermediate results. Start with the combination (i 5):
+(i ((lambda (x) (h (h x))) 5))
+ 
+(i (h (h 5)))
+Now (h 5):
+(i (h ((lambda (x) (g (g x))) 5)))
+ 
+(i (h (g (g 5))))
+Now (g 5):
+(i (h (g ((lambda (x) (inc (inc x))) 5))))
+ 
+(i (h (g (inc (inc 5)))))
+ 
+(i (h (g (inc 6))))
+ 
+(i (h (g 7)))
+ 
+(i (h ((lambda (x) (inc (inc x))) 7)))
+ 
+(i (h (inc (inc 7))))
+ 
+(i (h (inc 8)))
+ 
+(i (h 9))
+ 
+(i ((lambda (x) (g (g x))) 9))
+ 
+(i (g (g 9)))
+ 
+(i (g ((lambda (x) (inc (inc x))) 9)))
+ 
+(i (g (inc (inc 9))))
+ 
+(i (g (inc 10)))
+ 
+(i (g 11))
+ 
+(i ((lambda (x) (inc (inc x))) 11))
+ 
+(i (inc (inc 11)))
+ 
+(i (inc 12))
+ 
+(i 13)
+We can shortcut here: we started with (i (i 5)) and that became (i 13). So it appears that (i x) adds 8 to x, meaning that:
+(i 13)
+ 
+21
+Indeed, this is the same answer we get by evaluating this expression in the Scheme interpreter:
+(((double (double double)) inc) 5)

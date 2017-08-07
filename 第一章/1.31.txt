@@ -1,0 +1,35 @@
+;递归
+(define (product term a next b)
+    (if (> a b)
+        1
+        (* (term a)
+            (product term (next a) next b))))
+(define (inc x) (+ 1 x))    
+
+;将右边的分子整体左移一位，这样分子都比分母小 1，最后多乘了一个分子，将最后个分子除掉，再乘上少乘的 2 以及将左边的 4 乘过来  
+  
+(define (factorial n)
+    ;得到每一项的分母
+    (define (denominator a)
+        (if (even? a)
+            (- a 1)
+            a))
+     ;得到分子
+    (define (numerator a)
+        (+ (denominator a) 1))
+        
+     ;得到每一项
+    (define (term a)
+        (/ (numerator a) (denominator a)))
+    ；exact->inexact 转为浮点数表示
+    (/ (* (exact->inexact 2) 4 (product term 3 inc n)) (numerator n)))
+       
+            
+            
+;迭代
+(define (product term a next b)
+    (define (iter a result)
+    (if (> a b)
+        result
+        (iter (next a) (* result (term a)))))
+    (iter a 1))

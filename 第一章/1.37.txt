@@ -1,0 +1,18 @@
+;递归
+(define (cont-frac n d k)
+    (cont-frac-iter n d 1 k))
+(define (cont-frac-iter n d i k)
+    (if (= i k)
+        (/ (n i) (d i))
+        (/ (n i) (+ (d i) (cont-frac-iter n d (+ 1 i) k)))))
+        
+;迭代
+(define (cont-frac n d k)
+    (cont-frac-iter n d (/ (n k) (d k)) (- k 1)))
+(define (cont-frac-iter n d product k)
+    (if (= k 0)
+        product
+        (cont-frac-iter n d (/ (n k) (+ (d k) product)) (- k 1))))
+        
+        
+;从测试结果可以看出，只要 k 的值大于等于 11，就可以保证计算所得的黄金分割率的精度到达前四位： 1.618 。

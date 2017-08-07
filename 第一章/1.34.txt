@@ -1,0 +1,3 @@
+http://sicp.readthedocs.io/en/latest/chp1/34.html
+
+执行到 (2 2) 这一步时，解释器试图以 2 作为函数进行调用，但是 2 并不是一个函数，所以执行出错并打印信息： The object 2 is not applicable 。
