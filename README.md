@@ -13,7 +13,7 @@
 设置由源码来确定语言
 
 ![](img/2.png)
-## 参考
+## 部分参考
 http://sicp.readthedocs.io/en/latest/
 ## 学习交流
 QQ 648917857
