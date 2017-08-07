@@ -6,7 +6,7 @@
 ## 使用 racket
 [下载地址](https://racket-lang.org/download/)
 
-使用 Dracket
+使用 DrRacket
 
 ![](img/1.png)
 
