@@ -1,0 +1,24 @@
+(define (cons x y)
+    (lambda (m) (m x y)))
+(define (car z)
+    (z (lambda (p q) p)))
+(define (cdr z)
+    (z (lambda (p q) q)))
+    
+;cos 返回一个过程，这个过程接收一个过程，把 x y传入就收的过程
+;car 以 cos 返回的过程为参数， 传进去一个过程，并将 p 返回
+
+(car (cons 1 2))
+
+(car (lambda (m) (m 1 2)))          ; 展开 cons
+
+((lambda (z) (z (lambda (p q) p)))  ; 展开 car ，代换 z
+    (lambda (m) (m 1 2)))
+
+((lambda (m) (m 1 2))               ; 代换 m
+    (lambda (p q) p))
+
+((lambda (p q) p)                   ; 代换 p
+    1 2)
+
+1

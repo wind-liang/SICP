@@ -1,0 +1,5 @@
+(define (make-center-percent center percent)
+  (make-center-width center (* (/ percent 100.0) (abs center))))
+
+(define (percent i)
+  (* 100.0 (/ (width i) (abs (center i)))))

@@ -1,0 +1,9 @@
+假设所有的数都为正
+区间1：中心值 x 误差值 dx  (x-dx ,x+dx) 误差百分比 dx/x
+区间2：中心值 y 误差值 dy  (x-dy ,x+dy) 误差百分比 dy/y
+相乘 ((x-dx)*(y-dy) ,(x+dx)*(y+dy))
+     (x*y-x*dy-y*dx+dx*dy, x*y+x*dy+y*dx+dx*dy)
+     因为dx,dy 都很小，可以将 dx*dy 忽略
+相乘区间     (x*y-x*dy-y*dx, x*y+x*dy+y*dx)  中心值 x*y 误差值 x*dy+y*dx 误差百分比 (dx/x+dy/y)
+
+可以看到相乘区间的百分比误差等于各个区间的百分比误差的和

@@ -1,0 +1,16 @@
+(define (cons x y)
+    (* (expt 2 x)
+        (expt 3 y)))
+;举个例子， 
+;要取出 car ，我们就不断地进行除二操作，
+;每次除二进行一次计数，直到不能除尽为止，
+;这时的计数值就是 car 的值：        
+(define (car x)
+    (if (= 0 (remainder x 2))
+        (+ 1 (car (/ x 2)))
+        0))
+        
+(define (cdr x)
+    (if (= 0 (remainder x 3))
+        (+ 1 (cdr(/ x 3)))
+        0))

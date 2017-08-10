@@ -1,0 +1,147 @@
+#lang scheme
+;将之前的复制过来 
+;区间定义
+(define (make-interval a b) (cons a b))
+(define (upper-bound z)
+  (max (car z)
+       (cdr z)))
+ 
+(define (lower-bound z)
+  (min (car z)
+       (cdr z)))
+;加
+(define (add-interval x y)
+    (make-interval (+ (lower-bound x) (lower-bound y))
+        (+ (upper-bound x) (upper-bound y))))
+;减
+(define (sub-interval x y)
+    (make-interval (- (lower-bound x) (lower-bound y))
+        (- (upper-bound x) (upper-bound y))))
+;乘
+(define (mul-interval x y)
+  (let ((p1 (* (lower-bound x) (lower-bound y)))
+        (p2 (* (lower-bound x) (upper-bound y)))
+        (p3 (* (upper-bound x) (upper-bound y)))
+        (p4 (* (upper-bound x) (lower-bound y))))
+    (make-interval 
+      (min p1 p2 p3 p4)
+      (max p1 p2 p3 p4))))
+;除
+(define (div-interval x y)
+  (if (and 
+        (>= (upper-bound y) 0) 
+        (<= (lower-bound y) 0))
+    (error "Denominator spans zero")
+    (mul-interval 
+      x
+      (make-interval  (/ 1.0 (upper-bound y))
+                    (/ 1.0 (lower-bound y))))))
+;中心点
+(define (center i)
+    (/ (+ (lower-bound i) (upper-bound i)) 2))
+;区间宽度
+(define (width i)
+    (/ (- (upper-bound i) (lower-bound i)) 2))
+;误差生成
+(define (make-center-width c w)
+    (make-interval (- c w) (+ c w)))
+;百分比生成
+(define (make-center-percent center percent)
+  (make-center-width center (* (/ percent 100.0) (abs center))))
+;误差百分比
+(define (percent i)
+  (* 100.0 (/ (width i) (abs (center i)))))
+
+;并联电阻计算 1
+(define (par1 r1 r2)
+  (div-interval (mul-interval r1 r2)
+                (add-interval r1 r2)))
+;并联电阻计算 2
+(define (par2 r1 r2)
+  (let ((one (make-interval 1 1))) 
+    (div-interval one
+                  (add-interval (div-interval one r1)
+                                (div-interval one r2)))))
+;打印一个区间
+(define (print i)
+    (display "(")
+    (display (lower-bound i))
+    (display ",")
+    (display (upper-bound i))
+    (display ")")
+    (newline)
+    (display "center:")
+    (display (center i))
+    (newline)
+    (display "percent:")
+    (display (percent i))
+    (newline))
+;进行测试
+(define A (make-center-percent 6 5))
+(define B (make-center-percent 8 20))
+(define A-divide-B (div-interval A B))
+(define A-divide-A (div-interval A A))
+(define p1 (par1 A B))
+(define p2 (par2 A B))
+
+
+(display "A")
+(newline)
+(print A) 
+(newline)
+
+(display "B")
+(newline)
+(print B) 
+(newline)
+
+(display "A/A")
+(newline)
+(print A-divide-A) 
+(newline)
+
+(display "A/B")
+(newline)
+(print A-divide-B) 
+(newline)
+
+(display "par1")
+(newline)
+(print p1)  
+(newline)
+
+(display "par2")
+(newline)
+(print p2) 
+
+;用两个不同的公式计算并联电阻值，从数值计算角度来说，造成的误差是不同的，所以结果不同。
+;从区间运算角度来说，A/A不等于（1，1），所以这两个公式不等价，结果当然不同
+ A
+(5.7,6.3)
+center:6.0
+percent:4.9999999999999964
+
+B
+(6.4,9.6)
+center:8.0
+percent:19.999999999999996
+
+A/A
+(0.9047619047619048,1.1052631578947367)
+center:1.0050125313283207
+percent:9.975062344139646
+
+A/B
+(0.59375,0.984375)
+center:0.7890625
+percent:24.752475247524753
+
+par1
+(2.29433962264151,4.998347107438016)
+center:3.6463433650397628
+percent:37.07834416695175
+
+par2
+(3.0148760330578512,3.8037735849056604)
+center:3.409324808981756
+percent:11.569703622392975

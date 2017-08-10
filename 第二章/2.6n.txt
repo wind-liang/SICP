@@ -1,0 +1,2 @@
+;http://sicp.readthedocs.io/en/latest/chp2/6.html
+;不出很理解

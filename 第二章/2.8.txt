@@ -1,0 +1,24 @@
+(define (make-interval a b) (cons a b))
+
+(define (upper-bound z)
+  (max (car z)
+       (cdr z)))
+ 
+(define (lower-bound z)
+  (min (car z)
+       (cdr z)))
+
+
+(define (sub-interval x y)
+    (make-interval (- (lower-bound x) (lower-bound y))
+        (- (upper-bound x) (upper-bound y))))
+
+
+        
+> (define a (make-interval 2.3 5))
+> (define b (make-interval 1 6))
+> (define s (sub-interval a b))
+> (lower-bound s)
+-1.0
+> (upper-bound s)
+1.2999999999999998
